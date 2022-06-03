@@ -1,5 +1,9 @@
-import { BadRequestException } from '@nestjs/common';
+import {
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from '../prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
@@ -77,6 +81,22 @@ describe('UsersService', () => {
 
       await expect(sut.create(newUserData)).rejects.toThrowError(
         new BadRequestException('email already registered'),
+      );
+    });
+
+    it('should throw InternalServerErrorException when prisma create function throws', async () => {
+      prisma.user.create = jest.fn().mockRejectedValueOnce(new Error());
+
+      expect(sut.create(newUserData)).rejects.toThrowError(
+        new InternalServerErrorException(),
+      );
+    });
+
+    it('should throw InternalServerErrorException when prisma findUnique function throws', async () => {
+      prisma.user.findUnique = jest.fn().mockRejectedValueOnce(new Error());
+
+      expect(sut.create(newUserData)).rejects.toThrowError(
+        new InternalServerErrorException(),
       );
     });
   });
