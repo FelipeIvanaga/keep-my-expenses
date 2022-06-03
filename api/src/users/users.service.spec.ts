@@ -58,5 +58,11 @@ describe('UsersService', () => {
       expect(user.name).toBeDefined();
       expect(user.email).toBeDefined();
     });
+
+    it('should not return user hash', async () => {
+      const user = await sut.create(newUserData);
+
+      expect(user.hash).toBeUndefined();
+    });
   });
 });
