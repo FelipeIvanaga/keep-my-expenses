@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { usersServiceOnCreateFixture } from './fixtures/usersService-on-create-fixture';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
@@ -17,7 +18,9 @@ describe('UsersController', () => {
     sut = module.get<UsersController>(UsersController);
     usersService = module.get<UsersService>(UsersService);
 
-    usersService.create = jest.fn().mockResolvedValue({});
+    usersService.create = jest
+      .fn()
+      .mockResolvedValue(usersServiceOnCreateFixture);
   });
 
   it('should be defined', () => {
@@ -35,6 +38,11 @@ describe('UsersController', () => {
       sut.create(newUserData);
       expect(usersService.create).toBeCalledTimes(1);
       expect(usersService.create).toBeCalledWith(newUserData);
+    });
+
+    it('should return user data', async () => {
+      const user = await sut.create(newUserData);
+      expect(user).toEqual(usersServiceOnCreateFixture);
     });
   });
 });
