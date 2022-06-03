@@ -26,13 +26,13 @@ describe('UsersService', () => {
     const uuidRegex =
       /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/;
 
-    it('should call prisma with correct values', async () => {
-      const newUserData: CreateUserDto = {
-        name: 'any_name',
-        email: 'any_email',
-        password: 'any_password',
-      };
+    const newUserData: CreateUserDto = {
+      name: 'any_name',
+      email: 'any_email',
+      password: 'any_password',
+    };
 
+    it('should call prisma with correct values', async () => {
       await sut.create(newUserData);
 
       expect(prisma.user.create).toHaveBeenCalledTimes(1);
