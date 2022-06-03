@@ -1,3 +1,4 @@
+import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -43,6 +44,13 @@ describe('UsersController', () => {
     it('should return user data', async () => {
       const user = await sut.create(newUserData);
       expect(user).toEqual(usersServiceOnCreateFixture);
+    });
+
+    it('should throw same error when usersService throws', async () => {
+      const error = new BadRequestException('email already registered');
+      usersService.create = jest.fn().mockRejectedValueOnce(error);
+
+      expect(usersService.create(newUserData)).rejects.toThrow(error);
     });
   });
 });
