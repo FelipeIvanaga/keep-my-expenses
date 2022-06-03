@@ -12,7 +12,7 @@ export class UsersService {
     const id = generateUuid();
     const hash = await generateHash(password, 10);
 
-    this.prisma.user.create({
+    const user = await this.prisma.user.create({
       data: {
         id,
         name,
@@ -20,5 +20,7 @@ export class UsersService {
         hash,
       },
     });
+
+    return user;
   }
 }
