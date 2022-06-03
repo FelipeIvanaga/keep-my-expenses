@@ -35,7 +35,7 @@ describe('UsersController', () => {
     };
 
     it('should call usersService with correct values', async () => {
-      sut.create(newUserData);
+      await sut.create(newUserData);
       expect(usersService.create).toBeCalledTimes(1);
       expect(usersService.create).toBeCalledWith(newUserData);
     });
