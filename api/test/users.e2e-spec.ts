@@ -5,6 +5,7 @@ import { UsersModule } from '../src/users/users.module';
 import { CreateUserDto } from '../src/users/dto/create-user.dto';
 import { PrismaService } from '../src/prisma.service';
 import { APP_PIPE } from '@nestjs/core';
+import { isUUID } from 'class-validator';
 
 describe('UsersController (e2e)', () => {
   let sut: INestApplication;
@@ -29,11 +30,15 @@ describe('UsersController (e2e)', () => {
   };
 
   describe('/ (POST)', () => {
-    it('should add user', () => {
-      return request(sut.getHttpServer())
+    it('should add user and return a copy', async () => {
+      const response = await request(sut.getHttpServer())
         .post('/users')
-        .send(newUserData)
-        .expect(201);
+        .send(newUserData);
+
+      expect(response.status).toEqual(201);
+      expect(response.body.email).toEqual(newUserData.email);
+      expect(response.body.name).toEqual(newUserData.name);
+      expect(isUUID(response.body.id)).toBe(true);
     });
 
     it('should not be able to create two users with same email', async () => {
