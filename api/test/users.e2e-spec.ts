@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { UsersModule } from '../src/users/users.module';
 import { CreateUserDto } from '../src/users/dto/create-user.dto';
 import { PrismaService } from '../src/prisma.service';
+import { APP_PIPE } from '@nestjs/core';
 
 describe('UsersController (e2e)', () => {
   let sut: INestApplication;
@@ -12,6 +13,7 @@ describe('UsersController (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [UsersModule],
+      providers: [{ provide: APP_PIPE, useClass: ValidationPipe }],
     }).compile();
 
     sut = moduleFixture.createNestApplication();
@@ -43,6 +45,16 @@ describe('UsersController (e2e)', () => {
       return request(sut.getHttpServer())
         .post('/users')
         .send(newUserData)
+        .expect(400);
+    });
+
+    it('should return error when email is missing', () => {
+      return request(sut.getHttpServer())
+        .post('/users')
+        .send({
+          name: newUserData.name,
+          password: newUserData.password,
+        })
         .expect(400);
     });
   });
