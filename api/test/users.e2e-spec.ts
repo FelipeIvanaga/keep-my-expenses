@@ -33,5 +33,17 @@ describe('UsersController (e2e)', () => {
         .send(newUserData)
         .expect(201);
     });
+
+    it('should not be able to create two users with same email', async () => {
+      await request(sut.getHttpServer())
+        .post('/users')
+        .send(newUserData)
+        .expect(201);
+
+      return request(sut.getHttpServer())
+        .post('/users')
+        .send(newUserData)
+        .expect(400);
+    });
   });
 });
