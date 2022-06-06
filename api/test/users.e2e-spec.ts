@@ -48,7 +48,7 @@ describe('UsersController (e2e)', () => {
         .expect(400);
     });
 
-    it('should return error when email is missing', () => {
+    it('should return status 400 when email is missing', () => {
       return request(sut.getHttpServer())
         .post('/users')
         .send({
@@ -58,7 +58,7 @@ describe('UsersController (e2e)', () => {
         .expect(400);
     });
 
-    it('should return error when password is missing', () => {
+    it('should return status 400 when password is missing', () => {
       return request(sut.getHttpServer())
         .post('/users')
         .send({
@@ -68,7 +68,7 @@ describe('UsersController (e2e)', () => {
         .expect(400);
     });
 
-    it('should return error when name is missing', () => {
+    it('should return status 400 when name is missing', () => {
       return request(sut.getHttpServer())
         .post('/users')
         .send({
