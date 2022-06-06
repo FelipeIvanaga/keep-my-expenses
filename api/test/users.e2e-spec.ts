@@ -26,10 +26,12 @@ describe('UsersController (e2e)', () => {
     password: 'any_password',
   };
 
-  it('/ (POST)', () => {
-    return request(sut.getHttpServer())
-      .post('/users')
-      .send(newUserData)
-      .expect(201);
+  describe('/ (POST)', () => {
+    it('should add user', () => {
+      return request(sut.getHttpServer())
+        .post('/users')
+        .send(newUserData)
+        .expect(201);
+    });
   });
 });
