@@ -57,5 +57,15 @@ describe('UsersController (e2e)', () => {
         })
         .expect(400);
     });
+
+    it('should return error when password is missing', () => {
+      return request(sut.getHttpServer())
+        .post('/users')
+        .send({
+          name: newUserData.name,
+          email: newUserData.email,
+        })
+        .expect(400);
+    });
   });
 });
