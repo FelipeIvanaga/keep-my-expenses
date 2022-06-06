@@ -50,7 +50,7 @@ describe('UsersController', () => {
       const error = new BadRequestException('email already registered');
       usersService.create = jest.fn().mockRejectedValueOnce(error);
 
-      expect(usersService.create(newUserData)).rejects.toThrow(error);
+      expect(sut.create(newUserData)).rejects.toThrow(error);
     });
   });
 });
